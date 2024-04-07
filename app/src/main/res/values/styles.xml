@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextInter14TitleRegular400">
+        <item name="android:textSize">@dimen/font_14</item>
+    </style>
+</resources>

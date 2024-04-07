@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">BaseMvvm</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="tab_1">Tab 1</string>
+    <string name="tab_2">Tab 2</string>
+    <string name="tab_3">Tab 3</string>
+    <string name="tab_4">Tab 4</string>
+    <string name="tab_5">Tab 5</string>
+
+    <string name="text_error">Có lỗi xảy ra khi tải trang</string>
+    <string name="text_try_again">Thử lại</string>
+</resources>
