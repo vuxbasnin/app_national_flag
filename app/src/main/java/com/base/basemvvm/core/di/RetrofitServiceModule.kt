@@ -1,10 +1,14 @@
 package com.base.basemvvm.core.di
 
+import android.app.Application
 import android.content.Context
+import androidx.room.Room
 import com.base.basemvvm.BuildConfig
 import com.base.basemvvm.core.common.Constants
 import com.base.basemvvm.core.common.HeaderRetrofitEnum
 import com.base.basemvvm.core.utils.Utility
+import com.base.basemvvm.data.local.dao.NationalFlagDao
+import com.base.basemvvm.data.local.room_database.NationalFlagRoomDatabase
 import com.base.basemvvm.data.network.service.DemoService
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
@@ -12,7 +16,9 @@ import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import okhttp3.logging.HttpLoggingInterceptor
@@ -66,4 +72,10 @@ class RetrofitServiceModule {
     @Provides
     @Singleton
     fun provideAppService(@Named(Constants.Inject.API) retrofit: Retrofit): DemoService = retrofit.create(DemoService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideNationalFlagDao(nationalFlagRoomDatabase: NationalFlagRoomDatabase): NationalFlagDao {
+        return nationalFlagRoomDatabase.nationalFlagDao()
+    }
 }

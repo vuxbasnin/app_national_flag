@@ -24,6 +24,7 @@ swipe-refresh-layout = "1.2.0-alpha01"
 glide = "4.16.0"
 ktx-activity = "1.8.2"
 ktx-fragment = "1.6.2"
+room-database = "2.6.1"
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -68,3 +69,5 @@ ssp-android = { group = "com.intuit.ssp", name = "ssp-android", version.ref = "s
 sdp-android = { group = "com.intuit.sdp", name = "sdp-android", version.ref = "spAndroid" }
 swipe-refresh-layout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swipe-refresh-layout" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+room = {group = "androidx.room", name = "room-ktx", version.ref = "room-database"}
+room-compiler = {group = "androidx.room", name = "room-compiler", version.ref = "room-database"}

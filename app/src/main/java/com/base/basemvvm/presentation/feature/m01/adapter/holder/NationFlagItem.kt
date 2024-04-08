@@ -11,8 +11,8 @@ class NationFlagItem(private val binding: LayoutItemNationFlagBinding, val conte
 
     fun setData(nationFragItem: NationalFlagResponseItem) {
         try {
-            Utility.setImage(context, binding.imgNationalFlag, nationFragItem.flags.png)
-            binding.txtNameNational.text = nationFragItem.name.common
+            Utility.setImage(context, binding.imgNationalFlag, nationFragItem.flags?.png)
+            binding.txtNameNational.text = nationFragItem.name?.common
         } catch (e: Exception) {
             e.printStackTrace()
         }

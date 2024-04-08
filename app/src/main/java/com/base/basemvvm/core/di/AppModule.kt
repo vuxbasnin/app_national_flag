@@ -2,15 +2,20 @@ package com.base.basemvvm.core.di
 
 import android.app.Application
 import android.content.Context
+import com.base.basemvvm.data.local.room_database.NationalFlagRoomDatabase
 import com.base.basemvvm.presentation.MyApplication
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import javax.inject.Scope
 import javax.inject.Singleton
 
 /**
@@ -38,5 +43,19 @@ class AppModule {
     @Provides
     fun providerDispatcher(): CoroutineDispatcher {
         return Dispatchers.IO
+    }
+
+    @Provides
+    fun provideCoroutineScope(): CoroutineScope {
+        return CoroutineScope(SupervisorJob())
+    }
+
+    @Singleton
+    @Provides
+    fun provideNationalFlagRoomDatabase(
+        context: Context,
+        coroutineScope: CoroutineScope
+    ): NationalFlagRoomDatabase {
+        return NationalFlagRoomDatabase.getDatabase(context, coroutineScope)
     }
 }

@@ -1,5 +1,6 @@
 package com.base.basemvvm.presentation.feature.m01
 
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
@@ -7,6 +8,7 @@ import androidx.fragment.app.viewModels
 import com.base.basemvvm.core.common.addDivider
 import com.base.basemvvm.core.common.hide
 import com.base.basemvvm.core.common.show
+import com.base.basemvvm.core.utils.InternetUtil
 import com.base.basemvvm.core.utils.Utility
 import com.base.basemvvm.data.model.response.flag.NationalFlagResponseItem
 import com.base.basemvvm.databinding.M01FragmentBinding
@@ -49,9 +51,9 @@ class M01Fragment : BaseFragment<M01FragmentBinding>(M01FragmentBinding::inflate
         setUpSearchView()
     }
 
-    private fun setUpSearchView(){
+    private fun setUpSearchView() {
         try {
-            binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     return false
                 }
@@ -69,13 +71,15 @@ class M01Fragment : BaseFragment<M01FragmentBinding>(M01FragmentBinding::inflate
 
     private fun filterList(query: String?) {
         binding.rcvListData.show()
-        if(!query.isNullOrBlank()) {
+        if (!query.isNullOrBlank()) {
             val filteredList = ArrayList<NationalFlagResponseItem>()
             m01Adapter?.listData?.forEach {
-                if (it.name.common.lowercase(Locale.ROOT).contains(query)) filteredList.add(it)
+                if (it.name?.common?.lowercase(Locale.ROOT)
+                        ?.contains(query) == true
+                ) filteredList.add(it)
             }
 
-            if (filteredList.isEmpty()){
+            if (filteredList.isEmpty()) {
                 Toast.makeText(requireContext(), "No data found", Toast.LENGTH_SHORT).show()
                 binding.rcvListData.hide()
             } else {
@@ -88,10 +92,12 @@ class M01Fragment : BaseFragment<M01FragmentBinding>(M01FragmentBinding::inflate
 
     override fun initObserver() {
         viewModel.m01State.observe(viewLifecycleOwner) {
-            when(it){
+            when (it) {
                 is CommonState.Success -> {
                     binding.swipeRefreshData.isRefreshing = false
                     binding.rcvListData.show()
+                    if (it.data.isEmpty()) return@observe
+                    Log.d("NINVB", "NINVB => data size ${it.data.size}")
                     m01Adapter?.setData(it.data, viewModel.currentPage)
                     listDataDefault.addAll(it.data)
                 }

@@ -1,7 +1,17 @@
 package com.base.basemvvm.data.model.response.flag
 
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "name")
 data class Name(
-    val common: String,
-    val official: String,
-    val nativeName: NativeName
+    @ColumnInfo(name = "name")
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+    val common: String ?= null,
+    val official: String ?= null,
+    @Embedded(prefix = "nativeName_")
+    val nativeName: NativeName ?= null
 )

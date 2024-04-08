@@ -153,4 +153,8 @@ dependencies {
     //ktx
     implementation(libs.androidx.activity)
     implementation(libs.androidx.fragment)
+
+    //room
+    implementation(libs.room)
+    kapt(libs.room.compiler)
 }
