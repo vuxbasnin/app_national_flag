@@ -20,7 +20,8 @@ class M01Adapter(private val context: Context) :
 
     @SuppressLint("NotifyDataSetChanged")
     fun setDataFiltered(listDataFiltered: ArrayList<NationalFlagResponseItem>){
-        listData = listDataFiltered
+        listData.clear()
+        listData.addAll(listDataFiltered)
         notifyDataSetChanged()
     }
 

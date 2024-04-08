@@ -18,6 +18,7 @@ import com.base.basemvvm.presentation.core.widget.OnScrollRecyclerview
 import com.base.basemvvm.presentation.core.widget.SnapCenterListener
 import com.base.basemvvm.presentation.feature.m01.adapter.M01Adapter
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.util.Locale
 
 @AndroidEntryPoint
@@ -96,10 +97,9 @@ class M01Fragment : BaseFragment<M01FragmentBinding>(M01FragmentBinding::inflate
                 is CommonState.Success -> {
                     binding.swipeRefreshData.isRefreshing = false
                     binding.rcvListData.show()
-                    if (it.data.isEmpty()) return@observe
-                    Log.d("NINVB", "NINVB => data size ${it.data.size}")
                     m01Adapter?.setData(it.data, viewModel.currentPage)
                     listDataDefault.addAll(it.data)
+                    Log.d("NINVB", "NINVB => data size ${it.data.size} --- size data adapter ${m01Adapter?.listData?.size}")
                 }
 
                 is CommonState.Loading -> {
@@ -107,7 +107,7 @@ class M01Fragment : BaseFragment<M01FragmentBinding>(M01FragmentBinding::inflate
                 }
 
                 is CommonState.Fail -> {
-
+                    Toast.makeText(requireContext(), "No data!", Toast.LENGTH_SHORT).show()
                 }
 
                 else -> {
@@ -120,10 +120,9 @@ class M01Fragment : BaseFragment<M01FragmentBinding>(M01FragmentBinding::inflate
     override fun resetData() {
         binding.rcvListData.hide()
         binding.searchView.setQuery("", false)
-        viewModel.reset()
         m01Adapter?.resetState()
-        m01Adapter?.listData?.clear()
         listDataDefault.clear()
+        viewModel.reset()
     }
 
     override fun getData() {

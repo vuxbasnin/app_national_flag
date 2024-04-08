@@ -8,8 +8,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.base.basemvvm.data.local.dao.NationalFlagDao
 import com.base.basemvvm.data.local.room_database.NationalFlagRoomDatabase.Companion.VERSION_DATABASE
 import com.base.basemvvm.data.model.response.flag.NationalFlagResponseItem
-import dagger.Module
-import dagger.Provides
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
