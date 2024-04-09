@@ -12,11 +12,14 @@ import com.base.basemvvm.core.utils.InternetUtil
 import com.base.basemvvm.core.utils.Utility
 import com.base.basemvvm.data.model.response.flag.NationalFlagResponseItem
 import com.base.basemvvm.databinding.M01FragmentBinding
+import com.base.basemvvm.presentation.NavigationManager
 import com.base.basemvvm.presentation.core.base.BaseFragment
 import com.base.basemvvm.presentation.core.base.CommonState
 import com.base.basemvvm.presentation.core.widget.OnScrollRecyclerview
 import com.base.basemvvm.presentation.core.widget.SnapCenterListener
 import com.base.basemvvm.presentation.feature.m01.adapter.M01Adapter
+import com.base.basemvvm.presentation.feature.m06_detail.M06DetailNationalFlagFragment
+import com.base.basemvvm.presentation.my_interface.OnClickItemFlag
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.Locale
@@ -35,7 +38,7 @@ class M01Fragment : BaseFragment<M01FragmentBinding>(M01FragmentBinding::inflate
     private fun setupRcv() {
         binding.swipeRefreshData.isRefreshing = true
         binding.rcvListData.layoutManager = Utility.getLayoutVertical(context)
-        m01Adapter = M01Adapter(requireContext())
+        m01Adapter = M01Adapter(requireContext(), onClickItemFlag)
         m01Adapter?.setUpLoadMore(binding.rcvListData) {
             viewModel.getListNationFlag(m01Adapter?.listData)
         }
@@ -88,6 +91,19 @@ class M01Fragment : BaseFragment<M01FragmentBinding>(M01FragmentBinding::inflate
             }
         } else {
             m01Adapter?.setDataFiltered(listDataDefault)
+        }
+    }
+
+    private val onClickItemFlag = object : OnClickItemFlag {
+        override fun callback(tag: OnClickItemFlag.TagFlag, data: Any?) {
+            when(tag) {
+                OnClickItemFlag.TagFlag.ON_CLICK_ITEM_FLAG -> {
+                    val result = data as? NationalFlagResponseItem
+                    NavigationManager.getInstance().openFragment(
+                        M06DetailNationalFlagFragment.getInstance(result)
+                    )
+                }
+            }
         }
     }
 

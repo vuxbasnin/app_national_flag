@@ -28,7 +28,7 @@ class M01ViewModel @Inject constructor(private val m01Repository: DemoRepository
     fun getListNationFlag(prevList: ArrayList<NationalFlagResponseItem>? = null) {
         viewModelScope.launch {
             _m01State.value = CommonState.Loading
-            if (!InternetUtil.isNetworkAvailable()) {
+            if (InternetUtil.isNetworkAvailable()) {
                 Timber.d("M01ViewModel => Get data from api")
                 m01Repository.getListNationFlag().collect {
                     if (it.data != null) {

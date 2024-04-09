@@ -11,8 +11,9 @@ import com.base.basemvvm.data.model.response.flag.NationalFlagResponseItem
 import com.base.basemvvm.databinding.LayoutItemNationFlagBinding
 import com.base.basemvvm.presentation.core.widget.FooterHolder
 import com.base.basemvvm.presentation.feature.m01.adapter.holder.NationFlagItem
+import com.base.basemvvm.presentation.my_interface.OnClickItemFlag
 
-class M01Adapter(private val context: Context) :
+class M01Adapter(private val context: Context, private val onClickItemFlag: OnClickItemFlag) :
     BaseInfinityLoadAdapter<NationalFlagResponseItem>(context) {
     companion object {
         const val TYPE = 0
@@ -41,7 +42,7 @@ class M01Adapter(private val context: Context) :
     override fun onBindViewHolder1(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is NationFlagItem -> {
-                holder.setData(listData[position])
+                holder.setData(listData[position], onClickItemFlag)
             }
         }
     }
