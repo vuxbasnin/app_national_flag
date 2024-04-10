@@ -1,10 +1,13 @@
 package com.base.basemvvm.presentation.feature.m01
 
+import android.app.Application
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.base.basemvvm.core.utils.InternetUtil
 import com.base.basemvvm.data.DemoRepository
 import com.base.basemvvm.data.model.response.flag.NationalFlagResponseItem
+import com.base.basemvvm.presentation.MyApplication
 import com.base.basemvvm.presentation.core.base.BaseViewModel
 import com.base.basemvvm.presentation.core.base.CommonState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +18,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class M01ViewModel @Inject constructor(private val m01Repository: DemoRepository) :
+class M01ViewModel @Inject constructor(private val m01Repository: DemoRepository, private val context: Context) :
     BaseViewModel() {
     private var isUpdateData = true    //flag to check update data, current is always add data to database
     private val _m01State = MutableLiveData<CommonState<ArrayList<NationalFlagResponseItem>>>()
@@ -28,7 +31,7 @@ class M01ViewModel @Inject constructor(private val m01Repository: DemoRepository
     fun getListNationFlag(prevList: ArrayList<NationalFlagResponseItem>? = null) {
         viewModelScope.launch {
             _m01State.value = CommonState.Loading
-            if (InternetUtil.isNetworkAvailable()) {
+            if (InternetUtil.isNetworkConnected(context)) {
                 Timber.d("M01ViewModel => Get data from api")
                 m01Repository.getListNationFlag().collect {
                     if (it.data != null) {

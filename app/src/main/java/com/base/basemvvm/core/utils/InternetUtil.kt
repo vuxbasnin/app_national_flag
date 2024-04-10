@@ -1,6 +1,7 @@
 package com.base.basemvvm.core.utils
 
 import android.app.Application
+import android.content.Context
 import android.net.ConnectivityManager
 import android.net.LinkProperties
 import android.net.Network
@@ -46,4 +47,14 @@ object InternetUtil {
     }
 
     fun isNetworkAvailable() = internetState.value
+
+    fun isNetworkConnected(context: Context?): Boolean {
+        if (context == null) return true
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+        if (cm != null) {
+            val activeNetwork = cm.activeNetworkInfo
+            return activeNetwork != null && activeNetwork.isConnectedOrConnecting
+        }
+        return false
+    }
 }
