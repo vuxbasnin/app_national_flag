@@ -17,7 +17,6 @@ class M02Fragment: BaseFragment<M02FragmentBinding>(M02FragmentBinding::inflate)
     }
 
     override fun onClick(p0: View?) {
-        TODO("Not yet implemented")
-    }
 
+    }
 }
