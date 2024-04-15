@@ -2,32 +2,40 @@ package com.base.basemvvm.presentation.core.widget
 
 import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SweepGradient
+import androidx.compose.ui.unit.dp
 import com.base.basemvvm.R
 
-class SemiCycleView(context: Context, attrs: AttributeSet) : View(context, attrs) {
+class SemiCycleView (context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val backgroundPaint = Paint()
     private val mainPain = Paint()
     private var progress = 0f
     private val margin: Float = resources.getDimension(R.dimen.size_6)
 
+    @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val frame = RectF(margin, margin, width.toFloat() - margin, height.toFloat() - margin)
         canvas.drawArc(
             frame,
-            0f,
             -180f,
+            180f,
             true,
             backgroundPaint
         )
-        progress.times(-180f).let { canvas.drawArc(frame, 0f, it, true, mainPain) }
+        progress.times(180f).let { canvas.drawArc(frame, -180f, it, true, mainPain) }
     }
 
     fun setProcess(v: Float) {

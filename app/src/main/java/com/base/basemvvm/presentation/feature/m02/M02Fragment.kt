@@ -1,30 +1,30 @@
 package com.base.basemvvm.presentation.feature.m02
 
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
+import androidx.fragment.app.Fragment
 import com.base.basemvvm.R
 import com.base.basemvvm.databinding.M02FragmentBinding
 import com.base.basemvvm.presentation.core.base.BaseFragment
+import com.base.basemvvm.presentation.core.widget.SpeedometerPreview
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import kotlin.random.Random
 
 @AndroidEntryPoint
-class M02Fragment: BaseFragment<M02FragmentBinding>(M02FragmentBinding::inflate) {
-    override fun initView() {
-        binding.semiCycle.setUpUI(R.color.primary)
-        binding.btnChangeProgress.setOnClickListener {
-            val progress = Random.nextInt(0, 100)
-            binding.tvProgress.text = "$progress %"
-            binding.semiCycle.setProcess(progress.toFloat()/100f)
+class M02Fragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                SpeedometerPreview()
+            }
         }
-    }
-
-    override fun initObserver() {
-    }
-
-    override fun getData() {
-    }
-
-    override fun onClick(p0: View?) {
-
     }
 }
