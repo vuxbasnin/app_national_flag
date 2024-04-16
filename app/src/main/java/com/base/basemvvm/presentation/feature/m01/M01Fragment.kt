@@ -115,7 +115,6 @@ class M01Fragment : BaseFragment<M01FragmentBinding>(M01FragmentBinding::inflate
                     binding.rcvListData.show()
                     m01Adapter?.setData(it.data, viewModel.currentPage)
                     listDataDefault.addAll(it.data)
-                    Log.d("NINVB", "NINVB => data size ${it.data.size} --- size data adapter ${m01Adapter?.listData?.size}")
                 }
 
                 is CommonState.Loading -> {

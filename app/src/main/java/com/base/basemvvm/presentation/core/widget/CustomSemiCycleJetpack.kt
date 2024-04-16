@@ -5,20 +5,15 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
@@ -32,11 +27,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import com.base.basemvvm.R
 import com.google.android.material.math.MathUtils.lerp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -82,7 +75,6 @@ private fun Speedometer(
 ) {
     val textMeasurer = rememberTextMeasurer()
     val listGradientColor = listOf(Color.Red, Color.Blue)
-    Timber.d("NINVB => current $currentSpeed")
     Canvas(modifier = modifier, onDraw = {
         val gradientBrush = Brush.linearGradient(
             colors = listGradientColor,
@@ -200,14 +192,14 @@ private fun DrawScope.speedIndicator(
 
     for (i in 0 until 100) {
         val ratio = i.toFloat() / 100.toFloat()
-        val currentThickness = lerp(12f, 4f, ratio)
+        val currentThickness = lerp(16f, 6f, ratio)
         val currentPoint = Offset(
             center.x + (endOffset.x - center.x) * ratio,
             center.y + (endOffset.y - center.y) * ratio
         )
 
         this.drawLine(
-            color = Color.Magenta,
+            color = Color.Gray,
             start = currentPoint,
             end = currentPoint,
             strokeWidth = currentThickness,
