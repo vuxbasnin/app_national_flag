@@ -13,4 +13,11 @@
 
     //line
     <color name="color_line">#EBEBEB</color>
+
+    //custom view
+    <color name="color_sell_strong">#EF3647</color>
+    <color name="color_sell">#C93C64</color>
+    <color name="color_follow">#8E4491</color>
+    <color name="color_buy">#524CBE</color>
+    <color name="color_buy_strong">#2A51DC</color>
 </resources>

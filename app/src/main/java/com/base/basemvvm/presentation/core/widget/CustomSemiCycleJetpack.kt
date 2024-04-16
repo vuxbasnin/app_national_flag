@@ -5,19 +5,22 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -29,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.base.basemvvm.R
 import com.google.android.material.math.MathUtils.lerp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -38,7 +42,7 @@ import kotlin.math.sin
 
 private val INDICATOR_LENGTH = 14.dp
 private val MAJOR_INDICATOR_LENGTH = 18.dp
-private val INDICATOR_INITIAL_OFFSET = 5.dp
+private val INDICATOR_INITIAL_OFFSET = 20.dp
 
 @Composable
 fun SpeedometerScreen(
@@ -52,7 +56,7 @@ fun SpeedometerScreen(
             currentSpeed = speed.value,
             modifier = Modifier
                 .padding(180.dp)
-                .requiredSize(180.dp)
+                .requiredSize(240.dp)
         )
 
         Slider(
@@ -77,31 +81,44 @@ private fun Speedometer(
     modifier: Modifier = Modifier
 ) {
     val textMeasurer = rememberTextMeasurer()
-    val textColor = MaterialTheme.colorScheme.onSurface
-    val indicatorColor = MaterialTheme.colorScheme.onSurface
+    val listGradientColor = listOf(Color.Red, Color.Blue)
+    Timber.d("NINVB => current $currentSpeed")
     Canvas(modifier = modifier, onDraw = {
+        val gradientBrush = Brush.linearGradient(
+            colors = listGradientColor,
+            start = Offset(0f, 0f),d
+            end = Offset(size.width, 0f)
+        )
+
         drawArc(
-            color = Color.Red,
+            color = Color.Gray,
             startAngle = 0f,
             sweepAngle = -180f,
             useCenter = false,
             style = Stroke(width = 10.0.dp.toPx())
         )
 
+        drawArc(
+            brush = gradientBrush,
+            startAngle = 180f,
+            sweepAngle = currentSpeed,
+            useCenter = false,
+            style = Stroke(width = 10.0.dp.toPx())
+        )
+
         for (angle in 270 downTo 90 step 2) {
-            val speed = 270 - angle
-            if (speed % 45 == 0 || speed % 45 == 1) {
+            val percent = 270 - angle
+            if (percent % 45 == 0 || percent % 45 == 1) {
                 speedText(
-                    name = name(speed),
+                    percent = percent,
                     angle = angle,
-                    textMeasurer = textMeasurer,
-                    textColor = textColor
+                    textMeasurer = textMeasurer
                 )
             }
         }
-
-        Timber.d("NINVB => current speed $currentSpeed")
-        speedIndicator(speedAngle = 270 - currentSpeed)
+        speedIndicator(
+            speedAngle = 270 - currentSpeed
+        )
     })
 }
 
@@ -134,33 +151,39 @@ private fun name(speed: Int): String {
 }
 
 private fun DrawScope.speedText(
-    name: String,
+    percent: Int,
     angle: Int,
-    textColor: Color,
     textMeasurer: TextMeasurer
 ) {
     val textLayoutResult = textMeasurer.measure(
-        text = name,
-        style = TextStyle.Default.copy(lineHeight = TextUnit(0.0f, TextUnitType.Sp))
+        text = name(percent),
+        style = TextStyle.Default.copy(lineHeight = TextUnit(0.0f, TextUnitType.Sp)),
     )
     val textWidth = textLayoutResult.size.width
     val textHeight = textLayoutResult.size.height
 
+    val radius =
+        size.height / 2 + MAJOR_INDICATOR_LENGTH.toPx() + textHeight / 2 + INDICATOR_INITIAL_OFFSET.toPx()
+
     val textOffset = pointOnCircle(
         thetaInDegrees = angle.toDouble(),
-        radius = size.height / 2 - MAJOR_INDICATOR_LENGTH.toPx() - textWidth / 2 - INDICATOR_INITIAL_OFFSET.toPx(), // Adjusting radius with text width
+        radius = radius,
         cX = center.x,
         cY = center.y
     )
 
     drawContext.canvas.save()
-    // Translate to the text offset point, adjusting for vertical centering.
+
     drawContext.canvas.translate(
         textOffset.x - textWidth / 2,
-        textOffset.y - textHeight / 2
+        if (percent == 0 || percent == 180) {
+            textOffset.y + textHeight / 2 - 60
+        } else {
+            textOffset.y + textHeight / 2
+        }
     )
 
-    drawText(textLayoutResult, color = textColor)
+    drawText(textLayoutResult)
 
     drawContext.canvas.restore()
 }
@@ -173,7 +196,6 @@ private fun DrawScope.speedIndicator(
         radius = size.height / 2 - INDICATOR_LENGTH.toPx(),
         cX = center.x,
         cY = center.y,
-        isIndicator = true
     )
 
     for (i in 0 until 100) {
@@ -198,8 +220,7 @@ private fun pointOnCircle(
     thetaInDegrees: Double,
     radius: Float,
     cX: Float = 0f,
-    cY: Float = 0f,
-    isIndicator: Boolean = false
+    cY: Float = 0f
 ): Offset {
     val x = cX + (radius * sin(Math.toRadians(thetaInDegrees)).toFloat())
     val y = cY + (radius * cos(Math.toRadians(thetaInDegrees)).toFloat())
