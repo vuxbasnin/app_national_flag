@@ -86,7 +86,7 @@ private fun Speedometer(
     Canvas(modifier = modifier, onDraw = {
         val gradientBrush = Brush.linearGradient(
             colors = listGradientColor,
-            start = Offset(0f, 0f),d
+            start = Offset(0f, 0f),
             end = Offset(size.width, 0f)
         )
 
