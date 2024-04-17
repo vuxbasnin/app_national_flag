@@ -52,8 +52,7 @@ fun SpeedometerScreen(
             currentSpeed = speed.value,
             modifier = Modifier
                 .padding(180.dp)
-                .requiredSize(fl.dp / 2),
-            fl = fl
+                .requiredSize(fl.dp / 2)
         )
 
         Slider(
@@ -75,8 +74,7 @@ fun SpeedometerScreen(
 @Composable
 private fun Speedometer(
     @FloatRange(from = 0.0, to = 180.0) currentSpeed: Float,
-    modifier: Modifier = Modifier,
-    fl: Float
+    modifier: Modifier = Modifier
 ) {
     val textMeasurer = rememberTextMeasurer()
     val listGradientColor = listOf(Color.Red, Color.Blue)
@@ -109,8 +107,7 @@ private fun Speedometer(
                 speedText(
                     percent = percent,
                     angle = angle,
-                    textMeasurer = textMeasurer,
-                    fl = fl
+                    textMeasurer = textMeasurer
                 )
             }
         }
@@ -151,8 +148,7 @@ private fun name(speed: Int): String {
 private fun DrawScope.speedText(
     percent: Int,
     angle: Int,
-    textMeasurer: TextMeasurer,
-    fl: Float
+    textMeasurer: TextMeasurer
 ) {
     val textLayoutResult = textMeasurer.measure(
         text = name(percent),
@@ -183,6 +179,27 @@ private fun DrawScope.speedText(
     )
 
     drawText(textLayoutResult)
+
+    drawText(textLayoutResult, Color(when(angle){
+        in 0..33 -> {
+            0xFFEF37748
+        }
+        in 34..67 -> {
+            0xFFCB3B63
+        }
+        in 68..101 -> {
+            0xFF8E4490
+        }
+        in 102..135 -> {
+            0xFF4D4DC1
+        }
+        in 136..169 -> {
+            0xFF2A51DC
+        }
+        else -> {
+            0xFF000000
+        }
+    }))
 
     drawContext.canvas.restore()
 }
