@@ -27,9 +27,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.base.basemvvm.core.utils.DeviceUtil
 import com.google.android.material.math.MathUtils.lerp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -40,7 +42,8 @@ private val INDICATOR_INITIAL_OFFSET = 20.dp
 @Composable
 fun SpeedometerScreen(
     modifier: Modifier = Modifier,
-    coroutineScope: CoroutineScope = rememberCoroutineScope()
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    fl: Float
 ) {
     Column(modifier = modifier) {
         val speed = remember { Animatable(0f) }
@@ -49,7 +52,8 @@ fun SpeedometerScreen(
             currentSpeed = speed.value,
             modifier = Modifier
                 .padding(180.dp)
-                .requiredSize(240.dp)
+                .requiredSize(fl.dp / 2),
+            fl = fl
         )
 
         Slider(
@@ -71,7 +75,8 @@ fun SpeedometerScreen(
 @Composable
 private fun Speedometer(
     @FloatRange(from = 0.0, to = 180.0) currentSpeed: Float,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    fl: Float
 ) {
     val textMeasurer = rememberTextMeasurer()
     val listGradientColor = listOf(Color.Red, Color.Blue)
@@ -104,7 +109,8 @@ private fun Speedometer(
                 speedText(
                     percent = percent,
                     angle = angle,
-                    textMeasurer = textMeasurer
+                    textMeasurer = textMeasurer,
+                    fl = fl
                 )
             }
         }
@@ -145,7 +151,8 @@ private fun name(speed: Int): String {
 private fun DrawScope.speedText(
     percent: Int,
     angle: Int,
-    textMeasurer: TextMeasurer
+    textMeasurer: TextMeasurer,
+    fl: Float
 ) {
     val textLayoutResult = textMeasurer.measure(
         text = name(percent),
@@ -169,7 +176,7 @@ private fun DrawScope.speedText(
     drawContext.canvas.translate(
         textOffset.x - textWidth / 2,
         if (percent == 0 || percent == 180) {
-            textOffset.y + textHeight / 2 - 60
+            textOffset.y - textHeight * 2
         } else {
             textOffset.y + textHeight / 2
         }
@@ -192,20 +199,26 @@ private fun DrawScope.speedIndicator(
 
     for (i in 0 until 100) {
         val ratio = i.toFloat() / 100.toFloat()
-        val currentThickness = lerp(16f, 6f, ratio)
+        val currentThickness = lerp(8.dp.toPx(), 4f.dp.toPx(), ratio)
         val currentPoint = Offset(
             center.x + (endOffset.x - center.x) * ratio,
             center.y + (endOffset.y - center.y) * ratio
         )
 
         this.drawLine(
-            color = Color.Gray,
+            color = Color(0xFFDCDCDC),
             start = currentPoint,
             end = currentPoint,
             strokeWidth = currentThickness,
             cap = StrokeCap.Round
         )
     }
+
+    drawCircle(
+        color = Color(0xFF8E8E8E),
+        center = Offset(size.width / 2, size.height / 2),
+        radius = 5.0.dp.toPx()
+    )
 }
 
 private fun pointOnCircle(
@@ -219,8 +232,7 @@ private fun pointOnCircle(
     return Offset(x, y)
 }
 
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun SpeedometerPreview() {
-    SpeedometerScreen()
+fun SpeedometerPreview(fl: Float) {
+    SpeedometerScreen(fl = fl)
 }
