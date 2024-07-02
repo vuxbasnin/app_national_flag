@@ -1,36 +1,33 @@
-package com.base.basemvvm.presentation.core.chart
+package vbn.clean.nation_flag.presentation.core.base_chart
 
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.round
+import kotlin.math.roundToInt
 
 @Composable
-fun LineChart(
-    data: List<Pair<String, Double>> = emptyList(),
+fun QuadLineChart(
+    data: List<Pair<Int, Double>> = emptyList(),
     modifier: Modifier = Modifier
 ) {
     val spacing = 100f
-    val graphColor = colorResource(id = com.base.basemvvm.R.color.line_chart)
-    val line = colorResource(id = com.base.basemvvm.R.color.line)
-    val white = colorResource(id = com.base.basemvvm.R.color.white)
+    val graphColor = Color.Red
     val transparentGraphColor = remember { graphColor.copy(alpha = 0.5f) }
-    val upperValue = 100
-    val lowerValue = 0
+    val upperValue = remember { (data.maxOfOrNull { it.second }?.plus(1))?.roundToInt() ?: 0 }
+    val lowerValue = remember { (data.minOfOrNull { it.second }?.toInt() ?: 0) }
     val density = LocalDensity.current
 
     val textPaint = remember(density) {
         Paint().apply {
-            color = android.graphics.Color.BLACK
+            color = android.graphics.Color.WHITE
             textAlign = Paint.Align.CENTER
             textSize = density.run { 12.sp.toPx() }
         }
@@ -38,7 +35,7 @@ fun LineChart(
 
     Canvas(modifier = modifier) {
         val spacePerHour = (size.width - spacing) / data.size
-        (data.indices).forEach { i ->
+        (data.indices step 2).forEach { i ->
             val hour = data[i].first
             drawContext.canvas.nativeCanvas.apply {
                 drawText(
@@ -51,49 +48,45 @@ fun LineChart(
         }
 
         val priceStep = (upperValue - lowerValue) / 5f
-        val textWidth = textPaint.measureText("118.0")
-        (0..5).forEach { i ->
+        (0..4).forEach { i ->
             drawContext.canvas.nativeCanvas.apply {
                 drawText(
                     round(lowerValue + priceStep * i).toString(),
-                    size.width - textWidth + 40,
+                    30f,
                     size.height - spacing - i * size.height / 5f,
                     textPaint
-                )
-                drawLine(
-                    color = line,
-                    start = Offset(0f + 50, size.height - spacing - i * size.height / 5f),
-                    end = Offset(size.width - textWidth - spacing/2, size.height - spacing - i * size.height / 5f),
-                    strokeWidth = 1.dp.toPx()
                 )
             }
         }
 
+        var medX: Float
+        var medY: Float
         val strokePath = Path().apply {
             val height = size.height
             data.indices.forEach { i ->
-                val info = data[i]
-                val ratio = (info.second - lowerValue) / (upperValue - lowerValue)
+                val nextInfo = data.getOrNull(i + 1) ?: data.last()
+                val firstRatio = (data[i].second - lowerValue) / (upperValue - lowerValue)
+                val secondRatio = (nextInfo.second - lowerValue) / (upperValue - lowerValue)
 
                 val x1 = spacing + i * spacePerHour
-                val y1 = height - spacing - (ratio * height).toFloat()
-
-                if (i == 0) { moveTo(x1, y1) }
-                lineTo(x1, y1)
-
-                drawCircle(
-                    color = graphColor,
-                    radius = 20f,
-                    center = Offset(x1, y1),
-                )
+                val y1 = height - spacing - (firstRatio * height).toFloat()
+                val x2 = spacing + (i + 1) * spacePerHour
+                val y2 = height - spacing - (secondRatio * height).toFloat()
+                if (i == 0) {
+                    moveTo(x1, y1)
+                } else {
+                    medX = (x1 + x2) / 2f
+                    medY = (y1 + y2) / 2f
+                    quadraticBezierTo(x1 = x1, y1 = y1, x2 = medX, y2 = medY)
+                }
             }
         }
 
         drawPath(
             path = strokePath,
-            color = graphColor,
+            color = Color.Red,
             style = Stroke(
-                width = 2.dp.toPx(),
+                width = 3.dp.toPx(),
                 cap = StrokeCap.Round
             )
         )

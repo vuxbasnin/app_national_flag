@@ -157,4 +157,38 @@ dependencies {
     //room
     implementation(libs.room)
     kapt(libs.room.compiler)
+
+    //jetpack compose
+    val composeBom = platform("androidx.compose:compose-bom:2024.06.00")
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+
+    //noinspection UseTomlInstead
+    implementation("androidx.compose.material3:material3")
+    //noinspection UseTomlInstead
+    implementation("androidx.compose.ui:ui")
+
+    // Android Studio Preview support
+    //noinspection UseTomlInstead
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    //noinspection UseTomlInstead
+    debugImplementation("androidx.compose.ui:ui-tooling")
+
+    // UI Tests
+    //noinspection UseTomlInstead
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    //noinspection UseTomlInstead
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Optional - Included automatically by material, only add when you need
+    // the icons but not the material library (e.g. when using Material3 or a
+    // custom design system based on Foundation)
+    //noinspection UseTomlInstead
+    implementation("androidx.compose.material:material-icons-core")
+    // Optional - Add full set of material icons
+    //noinspection UseTomlInstead
+    implementation("androidx.compose.material:material-icons-extended")
+    // Optional - Add window size utils
+    //noinspection UseTomlInstead
+    implementation("androidx.compose.material3:material3-window-size-class")
 }
