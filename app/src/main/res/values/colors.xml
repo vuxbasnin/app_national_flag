@@ -21,4 +21,11 @@
     <color name="color_buy">#524CBE</color>
     <color name="color_buy_strong">#2A51DC</color>
     <color name="color_indicator">#DCDCDC</color>
+
+    <color name="line_chart">#FFA800</color>
+    <color name="line">#E5EAF5</color>
+    <color name="color_radius_main">#FFEFD0</color>
+    <color name="color_bg_main">#CCFFA800</color>
+    <color name="color_radius_default">#B3EEEEEE</color>
+    <color name="color_bg_default">#E3E3E3</color>
 </resources>
