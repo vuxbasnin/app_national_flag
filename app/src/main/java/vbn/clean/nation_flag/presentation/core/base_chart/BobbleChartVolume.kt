@@ -71,7 +71,7 @@ fun BobbleChartVolume(
             }) {
             var heightLine = 0f
             var widthLine = 0f
-            (0..6).forEachIndexed { index, pos ->
+            (0..5).forEachIndexed { index, pos ->
                 drawLine(
                     color = colorLine,
                     strokeWidth = 1.dp.toPx(),
