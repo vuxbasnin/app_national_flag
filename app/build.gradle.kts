@@ -16,11 +16,11 @@ fun getDate(): String {
 }
 
 android {
-    namespace = "com.base.basemvvm"
+    namespace = "vbn.clean.nation_flag"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.base.basemvvm"
+        applicationId = "vbn.clean.nation_flag"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -78,13 +78,13 @@ android {
     productFlavors {
         create("development") {
             dimension = "environment"
-            manifestPlaceholders["appLabel"] = "Base Mvvm Debug"
+            manifestPlaceholders["appLabel"] = "Quốc kỳ thế giới"
             buildConfigField("String", "BASE_URL", "\"https://reqres.in/api/\"")
             buildConfigField("String", "BASE_URL_NATION_FLAG", "\"https://restcountries.com/v3.1/\"")
         }
         create("production") {
             dimension = "environment"
-            manifestPlaceholders["appLabel"] = "Base Mvvm"
+            manifestPlaceholders["appLabel"] = "Quốc kỳ thế giới"
             buildConfigField("String", "BASE_URL", "\"https://reqres.in/api/\"")
             buildConfigField("String", "BASE_URL_NATION_FLAG", "\"https://restcountries.com/v3.1/\"")
         }
