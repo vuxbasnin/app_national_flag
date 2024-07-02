@@ -78,7 +78,7 @@ fun BobbleChartVolume(
                     start = Offset(0f, heightLine),
                     end = Offset(canvasWidth, heightLine)
                 )
-                heightLine += canvasHeight / 6
+                heightLine += canvasHeight / 5
             }
 
             val dashPathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
