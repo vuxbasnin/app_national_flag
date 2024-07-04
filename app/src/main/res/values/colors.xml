@@ -28,4 +28,6 @@
     <color name="color_bg_main">#CCFFA800</color>
     <color name="color_radius_default">#B3EEEEEE</color>
     <color name="color_bg_default">#E3E3E3</color>
+    <color name="color_up">#20C780</color>
+    <color name="color_down">#FF2847</color>
 </resources>

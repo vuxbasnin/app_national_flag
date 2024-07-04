@@ -114,6 +114,5 @@ fun LineChart(
                 endY = size.height - spacing
             )
         )
-
     }
 }
