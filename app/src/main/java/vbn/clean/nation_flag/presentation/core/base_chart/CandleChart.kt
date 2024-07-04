@@ -1,10 +1,8 @@
 package vbn.clean.nation_flag.presentation.core.base_chart
 
 import android.graphics.Color.BLACK
-import android.graphics.Color.GREEN
 import android.graphics.Paint
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -41,6 +39,8 @@ fun CandleChart(listData: List<CandlestickData>, modifier: Modifier) {
     }
 
     Canvas(modifier = modifier) {
+        val textWidth = textPaint.measureText("118.0")
+        drawVolumes(listData, colorUp, colorDown, textWidth)
         val spacePerHour = (size.width - spacing) / listData.size
         (listData.indices).forEachIndexed { index, data ->
             if (index % 20 == 0) {
@@ -52,7 +52,7 @@ fun CandleChart(listData: List<CandlestickData>, modifier: Modifier) {
                     drawText(
                         hour,
                         spacing + index * spacePerHour,
-                        size.height,
+                        size.height + 100,
                         textPaint
                     )
                 }
@@ -60,7 +60,6 @@ fun CandleChart(listData: List<CandlestickData>, modifier: Modifier) {
         }
 
         val priceStep = (upperValue - lowerValue) / 5f
-        val textWidth = textPaint.measureText("118.0")
         (0..5).forEach { i ->
             drawContext.canvas.nativeCanvas.apply {
                 drawText(
@@ -96,7 +95,6 @@ fun DrawScope.drawCandlesticks(
     val sizeMargin = size.height / 10
 
     val candleWidth = (size.width - textWidth - textWidth / 3) / candlesticks.size
-    val numberCandle = (size.width - textWidth - textWidth / 3) / candleWidth
 
     candlesticks.forEachIndexed { index, candlestick ->
         val openY =
@@ -134,6 +132,30 @@ fun DrawScope.drawCandlesticks(
             size = androidx.compose.ui.geometry.Size(
                 width = candleWidth,
                 height = kotlin.math.abs(closeY - openY)
+            )
+        )
+    }
+}
+
+fun DrawScope.drawVolumes(candlesticks: List<CandlestickData>, colorUp: Color, colorDown: Color, textWidth: Float) {
+    val maxVolume = candlesticks.maxOf { it.volume }
+
+    val candleWidth = (size.width - textWidth) / candlesticks.size
+
+    candlesticks.forEachIndexed { index, candlestick ->
+        val volumeHeight = size.height * (candlestick.volume / maxVolume.toFloat()) / 20
+        val color = if (candlestick.close > candlestick.open) colorUp else colorDown
+
+        // Draw volume bar
+        drawRect(
+            color = color,
+            topLeft = Offset(
+                x = index * candleWidth,
+                y = size.height - volumeHeight
+            ),
+            size = androidx.compose.ui.geometry.Size(
+                width = candleWidth / 2,
+                height = volumeHeight
             )
         )
     }

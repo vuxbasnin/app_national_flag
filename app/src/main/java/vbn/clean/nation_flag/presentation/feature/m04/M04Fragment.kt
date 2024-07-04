@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,7 +16,9 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import vbn.clean.nation_flag.R
 import vbn.clean.nation_flag.data.model.response.chart.candlestickData
 import vbn.clean.nation_flag.data.model.response.chart.json
 import vbn.clean.nation_flag.data.model.response.chart.parseCandlestickData
@@ -23,6 +26,7 @@ import vbn.clean.nation_flag.databinding.M04FragmentBinding
 import vbn.clean.nation_flag.presentation.core.base.BaseFragment
 import vbn.clean.nation_flag.presentation.core.base_chart.CandleChart
 import vbn.clean.nation_flag.presentation.core.base_chart.LineChart
+import vbn.clean.nation_flag.presentation.core.base_chart.drawVolumes
 
 class M04Fragment : BaseFragment<M04FragmentBinding>(M04FragmentBinding::inflate) {
     val data = listOf(
