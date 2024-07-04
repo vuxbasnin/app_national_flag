@@ -137,10 +137,15 @@ fun DrawScope.drawCandlesticks(
     }
 }
 
-fun DrawScope.drawVolumes(candlesticks: List<CandlestickData>, colorUp: Color, colorDown: Color, textWidth: Float) {
+fun DrawScope.drawVolumes(
+    candlesticks: List<CandlestickData>,
+    colorUp: Color,
+    colorDown: Color,
+    textWidth: Float,
+) {
     val maxVolume = candlesticks.maxOf { it.volume }
 
-    val candleWidth = (size.width - textWidth) / candlesticks.size
+    val candleWidth = (size.width - textWidth - textWidth / 3) / candlesticks.size
 
     candlesticks.forEachIndexed { index, candlestick ->
         val volumeHeight = size.height * (candlestick.volume / maxVolume.toFloat()) / 20
