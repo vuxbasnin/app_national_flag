@@ -12,11 +12,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import vbn.clean.nation_flag.data.model.response.chart.LineChartData
 import kotlin.math.round
 
 @Composable
 fun LineChart(
-    data: List<Pair<String, Double>> = emptyList(),
+    data: List<LineChartData> = emptyList(),
     modifier: Modifier = Modifier
 ) {
     val spacing = 100f
@@ -24,8 +25,8 @@ fun LineChart(
     val line = colorResource(id = vbn.clean.nation_flag.R.color.line)
     val white = colorResource(id = vbn.clean.nation_flag.R.color.white)
     val transparentGraphColor = remember { graphColor.copy(alpha = 0.5f) }
-    val upperValue = 100
-    val lowerValue = 0
+    val upperValue = 160
+    val lowerValue = 70
     val density = LocalDensity.current
 
     val textPaint = remember(density) {
@@ -39,7 +40,7 @@ fun LineChart(
     Canvas(modifier = modifier) {
         val spacePerHour = (size.width - spacing) / data.size
         (data.indices).forEach { i ->
-            val hour = data[i].first
+            val hour = data[i].year
             drawContext.canvas.nativeCanvas.apply {
                 drawText(
                     hour.toString(),
@@ -51,7 +52,7 @@ fun LineChart(
         }
 
         val priceStep = (upperValue - lowerValue) / 5f
-        val textWidth = textPaint.measureText("118.0")
+        val textWidth = textPaint.measureText("118.07")
         (0..5).forEach { i ->
             drawContext.canvas.nativeCanvas.apply {
                 drawText(
@@ -73,7 +74,8 @@ fun LineChart(
             val height = size.height
             data.indices.forEach { i ->
                 val info = data[i]
-                val ratio = (info.second - lowerValue) / (upperValue - lowerValue)
+                if (info.value == null) return@forEach
+                val ratio = (info.value - lowerValue) / (upperValue - lowerValue)
 
                 val x1 = spacing + i * spacePerHour
                 val y1 = height - spacing - (ratio * height).toFloat()
